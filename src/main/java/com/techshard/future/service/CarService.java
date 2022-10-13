@@ -22,20 +22,6 @@ public class CarService {
     @Autowired
     private CarRepository carRepository;
 
-    @Async
-    public CompletableFuture<List<Car>> saveCars(final InputStream inputStream) throws Exception {
-        final long start = System.currentTimeMillis();
-
-        List<Car> cars = parseCSVFile(inputStream);
-
-        LOGGER.info("Saving a list of cars of size {} records", cars.size());
-
-        cars = carRepository.saveAll(cars);
-
-        LOGGER.info("Elapsed time: {}", (System.currentTimeMillis() - start));
-        return CompletableFuture.completedFuture(cars);
-    }
-
     private List<Car> parseCSVFile(final InputStream inputStream) throws Exception {
         final List<Car> cars=new ArrayList<>();
         try {
