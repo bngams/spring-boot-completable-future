@@ -22,7 +22,7 @@ public class AsyncConfiguration {
         executor.setCorePoolSize(2);
         executor.setMaxPoolSize(2);
         executor.setQueueCapacity(25);
-        executor.setThreadNamePrefix("CarThread-");
+        executor.setThreadNamePrefix("MyApp-");
         executor.initialize();
         return executor;
     }

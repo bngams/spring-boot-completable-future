@@ -1,7 +1,9 @@
 package com.techshard.future.controller;
 
 import com.techshard.future.dao.entity.Car;
+import com.techshard.future.dao.entity.Job;
 import com.techshard.future.service.CarService;
+import com.techshard.future.service.JobService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,17 +25,20 @@ public class CarController {
     private static final Logger LOGGER = LoggerFactory.getLogger(CarController.class);
 
     @Autowired
-    private CarService carService;
+    CarService carService;
+
+    @Autowired
+    JobService jobService;
 
     @RequestMapping (method = RequestMethod.POST, consumes={MediaType.MULTIPART_FORM_DATA_VALUE},
             produces={MediaType.APPLICATION_JSON_VALUE})
-    public @ResponseBody ResponseEntity uploadFile(
+    public @ResponseBody ResponseEntity<Job> uploadFile(
             @RequestParam (value = "files") MultipartFile[] files) {
         try {
             for(final MultipartFile file: files) {
                 carService.saveCars(file.getInputStream());
             }
-            return ResponseEntity.status(HttpStatus.CREATED).build();
+            return new ResponseEntity(this.jobService.createJob(), HttpStatus.CREATED);
         } catch(final Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
